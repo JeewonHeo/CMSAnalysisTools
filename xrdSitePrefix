@@ -1,0 +1,15 @@
+#! /bin/zsh
+function get-xrootd-prefix() {
+    SITE=${1}
+    CONFIG_FILE=/cvmfs/cms.cern.ch/SITECONF/${SITE}/storage.json
+    if [ ! -f ${CONFIG_FILE} ]; then
+        echo "config not found: ${CONFIG_FILE}"
+        return 2
+    fi
+    jq '.[0].protocols[] | select(.protocol == "XRootD").prefix' ${CONFIG_FILE}
+}
+
+
+XROOTD_PREFIX=$(get-xrootd-prefix $1)
+
+typeset -m XROOTD_PREFIX

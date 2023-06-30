@@ -1,0 +1,17 @@
+#! python3
+import os
+import argparse
+
+parser = argparse.ArgumentParser(description='get prompt-reco configuration')
+parser.add_argument('-r', '--run', type=int, default=359691,
+                    help='run number (default: 359691)')
+parser.add_argument('-d', '--dataset', type=str, default='ZeroBias',
+                    help='Dataset (default="ZeroBias")')
+args = parser.parse_args()
+
+command = "curl -ks \
+        https://cmsweb.cern.ch/t0wmadatasvc/prod/reco_config\?run\={0} |\
+        jq '.result[] |\
+        select(.primary_dataset==\"{1}\")'".format(args.run, args.dataset)
+
+os.system(command)
